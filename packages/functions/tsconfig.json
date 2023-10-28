@@ -5,7 +5,8 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@aaron-usecase/core/*": ["../core/src/*"]
+      "@aaron-usecase/core/*": ["../core/src/*"],
+      "@aaron-usecase/types/*": ["../core/types/*"]
     }
   }
 }
