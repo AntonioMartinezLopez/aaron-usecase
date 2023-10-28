@@ -1,5 +1,6 @@
 import { SSTConfig } from "sst";
 import { ApiStack } from "./stacks/ApiStack";
+import { FrontendStack } from "./stacks/FrontendStack";
 
 export default {
   config(_input) {
@@ -9,7 +10,7 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(ApiStack);
+    app.stack(ApiStack).stack(FrontendStack);
     // Remove all resources when non-prod stages are removed
     if (app.stage !== "prod") {
       app.setDefaultRemovalPolicy("destroy");
