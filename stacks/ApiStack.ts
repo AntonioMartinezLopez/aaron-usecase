@@ -12,7 +12,6 @@ export function ApiStack({ stack }: StackContext) {
             "GET /api/states/{state}": "packages/functions/src/states.main",
             "GET /api/states/{state}/cases": "packages/functions/src/states.cases",
             "GET /api/states/{state}/cases/{days}": "packages/functions/src/states.cases",
-            "GET /test/{name}": "packages/functions/src/test.main",
         },
     });
 
