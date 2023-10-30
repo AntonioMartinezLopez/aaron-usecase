@@ -2,7 +2,7 @@ import { API } from "aws-amplify";
 import "./App.css";
 import { useEffect, useMemo, useState } from "react";
 import { TypeInformationGermany } from "../../core/types/InformationGermany";
-import { TypeCases, TypeStateCasesData } from "../../core/types/InformationCases";
+import { TypeCases, TypeStateCases, TypeStateCasesData } from "../../core/types/InformationCases";
 import { StatsCard } from "./components/StatsCard";
 import { AxisOptions, Chart } from "react-charts";
 import { TypeDeaths } from "../../core/types/InformationDeaths";
@@ -16,6 +16,14 @@ function fetchStateOverviewData(state: string): Promise<TypeInformationState> {
   return API.get("covid-api", `/api/states/${state}`, {});
 }
 
+function fetchStateCaseData(state: string, days: number): Promise<TypeStateCases> {
+  return days === 0 ? API.get("covid-api", `/api/states/${state}/cases`, {}) : API.get("covid-api", `/api/states/${state}/cases/${days}`, {});
+}
+
+function fetchStateDeathData(state: string, days: number): Promise<TypeStateCases> {
+  return days === 0 ? API.get("covid-api", `/api/states/${state}/deaths`, {}) : API.get("covid-api", `/api/states/${state}/deaths/${days}`, {});
+}
+
 function fetchGermanyCaseData(days: number = 100): Promise<TypeCases> {
   return days === 0 ? API.get("covid-api", `/api/germany/cases`, {}) : API.get("covid-api", `/api/germany/cases/${days}`, {});
 }
@@ -23,6 +31,7 @@ function fetchGermanyCaseData(days: number = 100): Promise<TypeCases> {
 function fetchGermanyDeathData(days: number = 100): Promise<TypeDeaths> {
   return days === 0 ? API.get("covid-api", `/api/germany/deaths`, {}) : API.get("covid-api", `/api/germany/deaths/${days}`, {});
 }
+
 
 
 
@@ -111,9 +120,7 @@ function App() {
         setInformationGermany(germanyData);
 
         const stateData = await fetchStateOverviewData(selectedState);
-        console.log(stateData);
         setInformationSelectedState(stateData);
-
 
         loadAndTransformGermanyCaseData(100);
         loadAndTransformGermanyDeathData(100)
@@ -129,6 +136,7 @@ function App() {
   useEffect(() => {
 
     async function loadStateData() {
+      setInformationSelectedState(null);
       const stateData = await fetchStateOverviewData(selectedState);
       setInformationSelectedState(stateData);
     }
@@ -262,35 +270,40 @@ function App() {
           </div>
 
           <div className="flex-1 w-full max-h-full flex items-center flex-row flex-wrap p-2 gap-4 overflow-y-auto">
-            <StatsCard
-              value={informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.cases}
-              title="Total Number of Cases"
-              desc={`New Cases Today: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.cases}`}
-            ></StatsCard>
-            <StatsCard
-              value={informationGermany?.deaths}
-              title="Total Number of Deaths"
-              desc={`New Deaths Today: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.deaths}`}
-            ></StatsCard>
-            <StatsCard
-              value={
-                informationSelectedState?.data[selectedState as keyof TypeStateCasesData]
-                  ? parseInt(informationSelectedState!.data[selectedState as keyof TypeStateCasesData]!.weekIncidence.toPrecision(2))
-                  : 0
-              }
-              title="Week Incidence"
-              desc={`Yesterday: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta &&
-                informationSelectedState!.data[selectedState as keyof TypeStateCasesData]!.delta.weekIncidence > 0
-                ? "↗︎"
-                : "↘︎"
-                } `}
-            ></StatsCard>
-            <StatsCard
-              value={informationSelectedState!.data[selectedState as keyof TypeStateCasesData]?.recovered}
-              title="Recovered"
-              desc={`Recovered today: ${informationSelectedState!.data[selectedState as keyof TypeStateCasesData]?.delta.recovered}`}
-            ></StatsCard>
+            {informationSelectedState ?
+              <>
+                <StatsCard
+                  value={informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.cases}
+                  title="Total Number of Cases"
+                  desc={`New Cases Today: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.cases}`}
+                ></StatsCard>
+                <StatsCard
+                  value={informationGermany?.deaths}
+                  title="Total Number of Deaths"
+                  desc={`New Deaths Today: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.deaths}`}
+                ></StatsCard>
+                <StatsCard
+                  value={
+                    informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.weekIncidence
+                      ? parseInt(informationSelectedState.data[selectedState as keyof TypeStateCasesData]!.weekIncidence.toPrecision(2))
+                      : 0
+                  }
+                  title="Week Incidence"
+                  desc={`Yesterday: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.weekIncidence &&
+                    informationSelectedState!.data[selectedState as keyof TypeStateCasesData]!.delta.weekIncidence > 0
+                    ? "↗︎"
+                    : "↘︎"
+                    } `}
+                ></StatsCard>
+                <StatsCard
+                  value={informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.recovered}
+                  title="Recovered"
+                  desc={`Recovered today: ${informationSelectedState?.data[selectedState as keyof TypeStateCasesData]?.delta.recovered}`}
+                ></StatsCard>
+              </>
+              : <span className="loading loading-ring loading-md"></span>}
           </div>
+
         </div>
         <div className="divider md:divider-horizontal"></div>
         <div className="h-full flex-1 flex flex-col">
