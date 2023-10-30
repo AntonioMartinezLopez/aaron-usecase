@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-const DataSchema = z.array(
+export const DataSchema = z.array(
     z.object({
-        cases: z.number(),
+        deaths: z.number(),
         date: z.string(),
     })
 );
 
-export const CaseSchema = z.object({
+export const DeathSchema = z.object({
     data: DataSchema,
     meta: z.object({
         source: z.string(),
@@ -18,7 +18,7 @@ export const CaseSchema = z.object({
     }),
 });
 
-export const StateCaseSchema = z.object({
+export const StateDeathSchema = z.object({
     data:
         z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
             id: z.number(),
@@ -34,13 +34,5 @@ export const StateCaseSchema = z.object({
     }),
 });
 
-export const StateCaseDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
-    id: z.number(),
-    name: z.string(),
-    history: DataSchema
-}));
-
-
-export type TypeCases = z.infer<typeof CaseSchema>
-export type TypeStateCases = z.infer<typeof StateCaseSchema>
-export type TypeStateCasesData = z.infer<typeof StateCaseDataSchema>
+export type TypeDeaths = z.infer<typeof DeathSchema>
+export type TypeStateDeaths = z.infer<typeof StateDeathSchema>

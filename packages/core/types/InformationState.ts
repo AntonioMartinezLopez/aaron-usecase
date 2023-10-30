@@ -20,6 +20,7 @@ export const InformationStateSchema = z.object({
                 cases: z.number(),
                 deaths: z.number(),
                 recovered: z.number(),
+                weekIncidence: z.number(),
             }),
         })),
     meta: z.object({

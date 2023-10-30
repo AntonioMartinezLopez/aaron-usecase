@@ -9,9 +9,13 @@ export function ApiStack({ stack }: StackContext) {
             "GET /api/germany": "packages/functions/src/germany.main",
             "GET /api/germany/cases": "packages/functions/src/germany.cases",
             "GET /api/germany/cases/{days}": "packages/functions/src/germany.cases",
+            "GET /api/germany/deaths": "packages/functions/src/germany.deaths",
+            "GET /api/germany/deaths/{days}": "packages/functions/src/germany.deaths",
             "GET /api/states/{state}": "packages/functions/src/states.main",
             "GET /api/states/{state}/cases": "packages/functions/src/states.cases",
             "GET /api/states/{state}/cases/{days}": "packages/functions/src/states.cases",
+            "GET /api/states/{state}/deaths": "packages/functions/src/states.deaths",
+            "GET /api/states/{state}/deaths/{days}": "packages/functions/src/states.deaths",
         },
     });
 
