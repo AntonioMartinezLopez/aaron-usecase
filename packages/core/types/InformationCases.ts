@@ -18,13 +18,14 @@ export const CaseSchema = z.object({
     }),
 });
 
+export const StateCaseDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
+    id: z.number(),
+    name: z.string(),
+    history: DataSchema
+}));
+
 export const StateCaseSchema = z.object({
-    data:
-        z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
-            id: z.number(),
-            name: z.string(),
-            history: DataSchema
-        })),
+    data: StateCaseDataSchema,
     meta: z.object({
         source: z.string(),
         contact: z.string(),
@@ -33,13 +34,6 @@ export const StateCaseSchema = z.object({
         lastCheckedForUpdate: z.string(),
     }),
 });
-
-export const StateCaseDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
-    id: z.number(),
-    name: z.string(),
-    history: DataSchema
-}));
-
 
 export type TypeCases = z.infer<typeof CaseSchema>
 export type TypeStateCases = z.infer<typeof StateCaseSchema>

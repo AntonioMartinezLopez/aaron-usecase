@@ -18,13 +18,14 @@ export const DeathSchema = z.object({
     }),
 });
 
+export const StateDeathDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
+    id: z.number(),
+    name: z.string(),
+    history: DataSchema
+}));
+
 export const StateDeathSchema = z.object({
-    data:
-        z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
-            id: z.number(),
-            name: z.string(),
-            history: DataSchema
-        })),
+    data: StateDeathDataSchema,
     meta: z.object({
         source: z.string(),
         contact: z.string(),
@@ -36,3 +37,4 @@ export const StateDeathSchema = z.object({
 
 export type TypeDeaths = z.infer<typeof DeathSchema>
 export type TypeStateDeaths = z.infer<typeof StateDeathSchema>
+export type TypeStateDeathsData = z.infer<typeof StateDeathDataSchema>
