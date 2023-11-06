@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { statesEnum } from "./InformationState";
 
 export const DataSchema = z.array(
     z.object({
@@ -18,7 +19,7 @@ export const DeathSchema = z.object({
     }),
 });
 
-export const StateDeathDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
+export const StateDeathDataSchema = z.record(statesEnum, z.object({
     id: z.number(),
     name: z.string(),
     history: DataSchema

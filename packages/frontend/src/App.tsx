@@ -105,7 +105,7 @@ function App() {
     }
   }
 
-  // Reusable function to trigger reload of data for based on different states
+  // Reusable function to trigger reload of data based on different states
   const reloadDataReducer = (period: SelectableTimePeriods, context: "Germany" | "SelectedState") => {
     switch (period) {
       case "Last 100 days":
@@ -154,8 +154,8 @@ function App() {
         const stateData = await fetchStateOverviewData(selectedState);
         setInformationSelectedState(stateData);
 
-        loadAndTransformGermanyCaseData(100);
-        loadAndTransformGermanyDeathData(100);
+        // Reuse Reducer for initial fetching of germany related deaths and cases
+        reloadDataReducer("Last 100 days", 'Germany');
 
         // Reuse Reducer for inital fetching of death and cases for default state
         reloadDataReducer(timePeriodSelectedState, 'SelectedState')

@@ -1,10 +1,11 @@
 export const states = ["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"];
+export const statesEnum = z.enum(states as [string, ...string[]]);
 
 import { z } from "zod";
 
 export const InformationStateSchema = z.object({
     data:
-        z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
+        z.record(statesEnum, z.object({
             id: z.number(),
             name: z.string(),
             population: z.number(),

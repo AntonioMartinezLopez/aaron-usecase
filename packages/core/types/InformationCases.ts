@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { statesEnum } from "./InformationState";
 
 const DataSchema = z.array(
     z.object({
@@ -18,7 +19,7 @@ export const CaseSchema = z.object({
     }),
 });
 
-export const StateCaseDataSchema = z.record(z.enum(["BB", "BE", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH"]), z.object({
+export const StateCaseDataSchema = z.record(statesEnum, z.object({
     id: z.number(),
     name: z.string(),
     history: DataSchema
